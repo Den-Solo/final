@@ -28,19 +28,31 @@ main {
 }
 
 /* Set width on the form input elements since they're 100% wide by default */
-input,
-select,
-textarea {
-    max-width: 280px;
-}
 
+#InputText {
+    resize: none;
+    height: 20em;
+}
 #result {
     resize: none;
+    height: 20em;
 }
-.form-group{
-    display:block;
-}
+
 .input-group {
     margin-top: 10px;
     margin-bottom: 10px;
 }
+
+.nav-tabs {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.btn-secondary {
+    border-radius: 0px !important;
+}
+.btn-group{
+    margin-left: 0.20em;
+    margin-right: 0em;
+}
+
+

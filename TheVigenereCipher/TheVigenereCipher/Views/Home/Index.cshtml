@@ -3,6 +3,9 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 
 }
+@section Scripts{
+    @Scripts.Render("~/Scripts/Index.js")
+}
 
 <div class="sub-header jumbotron text-white rounded bg-dark">
     <h1 class="display-4 font-italic">Новая жизнь шифра из прошлого</h1>
@@ -15,48 +18,76 @@
     <div class="container">
         <div class="description text-wrap raw col-lg-8 mx-auto">
             <p class="lead ">
-                описание описание описание описание описание описание описание описание описание описание
-                описание описание описание описание описание
-                описание описание описание описание описаниеописание описание описание описание описание
-                описание описание описание описание описаниеописание описание описание описание описание
-                описание описание описание описание описаниеописание описание описание описание описание
-                описание описание описание описание описание
-                описание описание описание описание описаниеописание описание описание описание описание
-                описание описание описание описание описаниеописание описание описание описание описание
-                описание описание описание описание описание
+                Здесь должно быть описание, но его нет... и не будет...
             </p>
         </div>
 
-        <div class="form-group row">
-            <div class="file-upload-wrapper text-center">
-                <input type="file" name="InputFile" id="InputFile" class="file-upload" data-file-upload="file-upload" />
+        <div class="row form-group col-md-12 col-lg-8 mx-auto">
+            <ul class="nav nav-tabs input-group mb-3" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link active" id="tab_enter_text-tab" data-toggle="tab" href="#tab_enter_text" role="tab" aria-controls="inputText" aria-selected="true">
+                        Ввести текст
+                    </a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="tab_upload_file-tab" data-toggle="tab" href="#tab_upload_file" role="tab" aria-controls="inputFile" aria-selected="false">
+                        Загрузить файл
+                    </a>
+                </li>
+            </ul>
+            <div class="tab-content input-group mb-3">
+                <!-- Первый блок (он отображается по умолчанию) -->
+                <div class="tab-pane  input-group fade show active" id="tab_enter_text" aria-labelledby="tab_enter_text-tab">
+                    <div class="input-group mb-3">
+
+                        <textarea id="InputText" class="form-control "></textarea>
+
+                    </div>
+                </div>
+                <!-- Второй блок -->
+                <div class="tab-pane input-group fade " id="tab_upload_file" aria-labelledby="tab_upload_file-tab">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Загрузка файла</span>
+                        </div>
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" name="InputFile" id="InputFile">
+                            <label class="custom-file-label" for="InputFile">Choose file</label>
+                        </div>
+                    </div>
+                </div>
+            </div> <!--"tab-content" end-->
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Кодовое слово</span>
+                </div>
+                <input type="text" name="KeyWord" id="KeyWord" class="form-control" aria-label="Default" placeholder="Кодовое слово">
+                <div class="input-group-append">
+                    <span class="input-group-text">только кириллица</span>
+                </div>
             </div>
-            <div class="input-group row justify-content-center">
-                <input type="text" name="KeyWord" id="KeyWord" class="form-control" placeholder="Кодовое слово">
-            </div>
-            <div class="input-group row justify-content-center">
-                <input name="EncryptButton" class="btn btn-primary" value="Зашифровать" onclick="EncryptButtonClick()" />
-                <input name="DecryptButton" class="btn btn-primary" value="Расшифровать" onclick="DecryptButtonClick()" />
+            <div class="input-group ">
+                <input name="EncryptButton" class="btn btn-secondary col-lg-6" value="Зашифровать" onclick="SendData(this.name)" readonly="readonly" />
+                <input name="DecryptButton" class="btn btn-secondary col-lg-6" value="Расшифровать" onclick="SendData(this.name)" readonly="readonly" />
             </div>
         </div>
 
-        <div class="form-group row justify-content-center col-12">
-            <div class="input-group row justify-content-center">
+        <div class="form-group row col-md-12 col-lg-8 mx-auto">
+            <div class="input-group-prepend">
                 <span class="input-group-text">Результат:</span>
             </div>
-            <div class="input-group row justify-content-center col-12"  style="height:500px;">
+            <div class="input-group">
                 <textarea id="result" class="form-control "></textarea>
             </div>
         </div>
-        <div class="form-group row justify-content-center">
-            @using (Html.BeginForm("GetFile", "Home", FormMethod.Get))
-            {
-                <div class="input-group row justify-content-center">
-                    <input type="submit" name="txt" class="btn btn-primary" value="Скачать .txt" />
-                    <input type="submit" name="docx" class="btn btn-primary" value="Скачать .docx" />
-                </div>
-            }
-        </div>
+
+        @using (Html.BeginForm("GetFile", "Home", FormMethod.Get, new { @class = "input-group row col-md-12 col-lg-8 mx-auto download_buttons" }))
+        {
+            <input type="submit" name="txt" class="btn btn-secondary col-lg-6" value="Скачать .txt" disabled="disabled" />
+            <input type="submit" name="docx" class="btn btn-secondary col-lg-6" value="Скачать .docx" disabled="disabled" />
+        }
+
     </div>
 </div>
 
