@@ -19,13 +19,12 @@ namespace Cipher.Tests.Controllers
     public class EncryptorControllerTest
     {
         string projectDir = Path.GetDirectoryName(Path.GetDirectoryName(System.IO.Directory.GetCurrentDirectory()));
+        string plainText = "Привет мир 123 Hello\nЭто тест!";
+        string cipherText = "Ябсдйе ьщщ 123 Hello\nЯчб вхъф!";
+        string keyWord = "Привет";
         [TestMethod]
         public void DoCryptography()
         {
-            string plainText = "Привет мир 123 Hello\nЭто тест!";
-            string cipherText = "Ябсдйе ьщщ 123 Hello\nЯчб вхъф!";
-            string keyWord = "Привет";
-
             EncryptorController controller = new EncryptorController();
             controller.Request = new HttpRequestMessage();
             controller.Request.SetConfiguration(new HttpConfiguration());
@@ -162,25 +161,62 @@ namespace Cipher.Tests.Controllers
             }
         }
         [TestMethod]
-        public void GetFile()
+        public void TryEncryptFile()
         {
-
+            var tryEncryptTxt = typeof(EncryptorController).GetMethod("TryEncryptFile", BindingFlags.NonPublic | BindingFlags.Static);
+            Guid guid = Guid.NewGuid();
+            {
+                object[] parameters = new object[] { projectDir + "/TestFiles/Test_1.docx", keyWord, guid.ToString(), VigenereEncryptor.Operation.Encrypt, null,null };
+                var response = (EncryptorController.ErrorMsg)tryEncryptTxt.Invoke(null, parameters);
+                Assert.AreEqual(EncryptorController.ErrorMsg.Ok, response);
+                Assert.AreEqual("docx", parameters[parameters.Length -1]);
+                Assert.AreEqual(cipherText, parameters[parameters.Length - 2].ToString().Replace("\r", "").Replace("\f", "").TrimEnd());
+            }
+            {
+                object[] parameters = new object[] { projectDir + "/TestFiles/Test_1.txt", keyWord, guid.ToString(), VigenereEncryptor.Operation.Encrypt, null, null };
+                var response = (EncryptorController.ErrorMsg)tryEncryptTxt.Invoke(null, parameters);
+                Assert.AreEqual(EncryptorController.ErrorMsg.Ok, response);
+                Assert.AreEqual("txt", parameters[parameters.Length - 1]);
+                Assert.AreEqual(cipherText, parameters[parameters.Length - 2].ToString().Replace("\r", "").Replace("\f", "").TrimEnd());
+            }
         }
-        private void TryEncryptFile()
+        [TestMethod]
+        public void TryEncryptRawText()
         {
-
+            var tryEncryptTxt = typeof(EncryptorController).GetMethod("TryEncryptRawText", BindingFlags.NonPublic | BindingFlags.Static);
+            Guid guid = Guid.NewGuid();
+            {
+                object[] parameters = new object[] { plainText, keyWord, guid.ToString(), VigenereEncryptor.Operation.Encrypt, null };
+                var obj = tryEncryptTxt.Invoke(null, parameters);
+                Assert.AreEqual(cipherText, parameters.Last().ToString().Replace("\r", "").Replace("\f", "").TrimEnd());
+            }
         }
-        private void TryEncryptRawText()
+        [TestMethod]
+        public void TryEncryptDocx()
         {
-
+            var tryEncryptTxt = typeof(EncryptorController).GetMethod("TryEncryptDocx", BindingFlags.NonPublic | BindingFlags.Static);
+            Guid guid = Guid.NewGuid();
+            {
+                object[] parameters = new object[] { projectDir + "/TestFiles/Test_1.docx", keyWord, guid.ToString(), VigenereEncryptor.Operation.Encrypt, null };
+                var obj = tryEncryptTxt.Invoke(null, parameters);
+                Assert.AreEqual(cipherText, parameters.Last().ToString().Replace("\r", "").Replace("\f","").TrimEnd());
+            }
         }
-        private void TryEncryptDocx()
+        [TestMethod]
+        public void TryEncryptTxt()
         {
-
-        } 
-        private void TryEncryptTxt()
-        {
-
+            var tryEncryptTxt = typeof(EncryptorController).GetMethod("TryEncryptTxt", BindingFlags.NonPublic | BindingFlags.Static);
+            Guid guid = Guid.NewGuid();
+            {
+                object[] parameters = new object[] { projectDir + "/TestFiles/Test_1.txt", keyWord, guid.ToString(), VigenereEncryptor.Operation.Encrypt, null };
+                var obj = tryEncryptTxt.Invoke(null, parameters);
+                Assert.AreEqual(cipherText, parameters.Last().ToString().Replace("\r", ""));
+            }
+            {
+                object[] parameters = new object[] { projectDir + "/TestFiles/Test_1_result.txt", keyWord, guid.ToString(), VigenereEncryptor.Operation.Decrypt, null };
+                var obj = tryEncryptTxt.Invoke(null, parameters);
+                Assert.AreEqual(plainText, parameters.Last().ToString().Replace("\r", ""));
+            }
         }
 
         private bool CompareDocx(string path1, string path2)
