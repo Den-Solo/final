@@ -42,9 +42,15 @@ namespace Cipher.Library
                 Thread.Sleep(_cleanInterval);
             }
         }
+        public void ClearAll()
+        {
+            _outdatingInterval = new TimeSpan(-1);
+            Clean();
+        }
         public void Abort()
         {
             _th.Abort();
         }
+
     }
 }

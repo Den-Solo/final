@@ -19,7 +19,7 @@ namespace Cipher.Tests.Controllers
 
             // Утверждение
             Assert.IsNotNull(result);
-            Assert.AreEqual("Home Page", result.ViewBag.Title);
+            Assert.AreEqual("Encryptor", result.ViewBag.Title);
         }
     }
 }

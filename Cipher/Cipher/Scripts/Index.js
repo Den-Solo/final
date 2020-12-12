@@ -102,25 +102,3 @@ function SendData(senderName) {
     }
 
 };
-
-
-
-/*function getCookie(name) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(';').shift();
-};
-
-function HandleOnBeforeUnload() {
-    var data = new FormData();
-    data.append("resultFileName", getCookie("resultFileName"));
-    $.ajax({
-        type: "GET",
-        url: '/api/Encryptor/OnPageClose',
-        contentType: false,
-        processData: false,
-        data: data,
-        success: function (result) { },
-        error: function (xhr, status, p3) { }
-    });
-}*/

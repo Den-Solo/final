@@ -26,7 +26,7 @@ namespace Cipher.Controllers
         private const string _cookieName = "resultFileName";
         
 
-        private enum ErrorMsg
+        public enum ErrorMsg
         {
             [Description("Model loading error")]
             ModelNotLoaded,
@@ -67,7 +67,7 @@ namespace Cipher.Controllers
                     else
                     {
                         string fileName = System.IO.Path.GetFileName(model.InputFile.FileName);
-                        string loadedFilePath = HomeController._LoadedFilesDir + guid + '.' + fileName.Split('.').Last();
+                        string loadedFilePath = WebApiApplication._LoadedFilesDir + guid + '.' + fileName.Split('.').Last();
                         System.IO.File.WriteAllBytes(loadedFilePath, model.InputFile.Buffer);
 
                         status = TryEncryptFile(loadedFilePath, model.KeyWord, guid.ToString(), op, out resultContent, out fileExtention);
@@ -100,7 +100,7 @@ namespace Cipher.Controllers
                 return new HttpResponseMessage(HttpStatusCode.NotFound);
             }
             byte[] fileBytes = null;
-            string path = HomeController._ResultFilesDir + fName;
+            string path = WebApiApplication._ResultFilesDir + fName;
             string extention = fName.Split('.').Last();
             if (File.Exists(path))
             {
@@ -130,13 +130,6 @@ namespace Cipher.Controllers
         }
 
 
-        private static void DeleteResultFiles(string resultFileName)
-        {
-            if (resultFileName != null)
-            {
-                System.IO.File.Delete(HomeController._ResultFilesDir + resultFileName);
-            }
-        }
         private static ErrorMsg TryEncryptFile(string filePath, string keyWord, string guid, VigenereEncryptor.Operation op, out string result, out string fileExtention)
         {
             result = null;
@@ -171,7 +164,7 @@ namespace Cipher.Controllers
             var status =  rawResult == null ? ErrorMsg.InvalidKeyWord : ErrorMsg.Ok;
             if (status == ErrorMsg.Ok)
             {
-                System.IO.File.WriteAllText(HomeController._ResultFilesDir + guid + ".txt", rawResult);
+                System.IO.File.WriteAllText(WebApiApplication._ResultFilesDir + guid + ".txt", rawResult);
             }
             return status;
         }
@@ -194,7 +187,7 @@ namespace Cipher.Controllers
                 }
                 OoxmlSaveOptions opt = new OoxmlSaveOptions(SaveFormat.Docx);
                 opt.Compliance = OoxmlCompliance.Ecma376_2006;
-                docx.Save(HomeController._ResultFilesDir + guid + ".docx", opt);
+                docx.Save(WebApiApplication._ResultFilesDir + guid + ".docx", opt);
             }
             catch (Exception)
             {
@@ -214,11 +207,8 @@ namespace Cipher.Controllers
             {
                 return ErrorMsg.InvalidKeyWord;
             }
-            System.IO.File.WriteAllText(HomeController._ResultFilesDir + guid + ".txt", result);
+            System.IO.File.WriteAllText(WebApiApplication._ResultFilesDir + guid + ".txt", result);
             return ErrorMsg.Ok;
         }
     }
-
-
-
 }

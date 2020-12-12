@@ -22,15 +22,8 @@ namespace Cipher.Library
         private Operation _op;
         public VigenereEncryptor(string keyWord, Operation op)
         {
-            _kwIdxs = StrToIdxs(keyWord.ToLower());
+            _kwIdxs = GetKeyWordIdxs(keyWord.ToLower(),op);
             _op = op;
-            if (op == Operation.Decrypt)
-            {
-                for (int i = 0; i < _kwIdxs.Length; ++i)
-                {
-                    _kwIdxs[i] = (short)(_rawAlphabet.Length - _kwIdxs[i]);
-                }
-            }
         }
         public string Encrypt(in string text)
         {
@@ -51,14 +44,7 @@ namespace Cipher.Library
         public static string Encrypt(in string text, in string keyWord, Operation op) //returns null if keyword invalid
         {
             char[] result = null;
-            short[] kwIdxs = StrToIdxs(keyWord.ToLower());
-            if (op == Operation.Decrypt)
-            {
-                for (int i = 0; i < kwIdxs.Length; ++i)
-                {
-                    kwIdxs[i] = (short)(_rawAlphabet.Length - kwIdxs[i]);
-                }
-            }
+            short[] kwIdxs = GetKeyWordIdxs(keyWord.ToLower(),op);
             if (kwIdxs != null)
             {
                 result = new char[text.Length];
@@ -102,6 +88,22 @@ namespace Cipher.Library
                 }
             }
             return result;
+        }
+        private static short[] GetKeyWordIdxs(in string keyWord, Operation op)
+        {
+            short[] kwIdxs = StrToIdxs(keyWord.ToLower());
+            if (kwIdxs == null)
+            {
+                return null;
+            }
+            if (op == Operation.Decrypt)
+            {
+                for (int i = 0; i < kwIdxs.Length; ++i)
+                {
+                    kwIdxs[i] = (short)(_rawAlphabet.Length - kwIdxs[i]);
+                }
+            }
+            return kwIdxs;
         }
         public static bool ValidateKeyWord(string KeyWord)
         {
