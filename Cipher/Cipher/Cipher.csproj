@@ -288,6 +288,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Library\Extentions.cs" />
     <Compile Include="Library\OldFileCleaner.cs" />
     <Compile Include="Library\VigenereEncryptor.cs" />
     <Compile Include="Models\EncryptionResultModel.cs" />
